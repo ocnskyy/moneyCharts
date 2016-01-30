@@ -15,6 +15,7 @@
 
 ```sh
 $ git clone https://github.com/ocnskyy/moneyCharts.git
+$ cd moneyCharts
 $ bower install
 ```
 Запускать на локальном сервере с установленным Apache2 + PHP5.

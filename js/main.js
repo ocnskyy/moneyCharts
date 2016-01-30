@@ -8,7 +8,7 @@
 
     while (tmp < last) {
       tmp.setDate(tmp.getDate() + 1);
-      var str = "http://kursach.sappz/zapros.php?date=" + $filter('date')(tmp, 'dd.MM.yyyy');
+      var str = "../zapros.php?date=" + $filter('date')(tmp, 'dd.MM.yyyy');
       promises.push($http.get(str));
     }
 

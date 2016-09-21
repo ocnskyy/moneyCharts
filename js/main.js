@@ -35,7 +35,7 @@ angular.module('myApp', ['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'chart.j
         $scope.save = true;
 
         $scope.final = {
-            // name: 'usd'
+            name: 'usd'
         };
 
         $scope.series = ['Sale', 'Purchase'];
@@ -66,16 +66,14 @@ angular.module('myApp', ['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'chart.j
                 $scope.currencies = {};
 
                 myService.getArray($scope.data.date1, $scope.data.date2).then(function(res) {
+					console.log(res, $scope.final);
                     for (i in res) {
                         $scope.dates.push(res[i].date);
 
                         for (j in res[i].exchangeRate) {
                             var key = res[i].exchangeRate[j].currency.toLowerCase();
                             if (_.isEmpty($scope.currencies[key])) {
-                                $scope.currencies[key] = [
-                                    [],
-                                    []
-                                ];
+                                $scope.currencies[key] = [[],[]];
                             }
                             $scope.currencies[key][0].push(res[i].exchangeRate[j].saleRate || res[i].exchangeRate[j].saleRateNB);
                             $scope.currencies[key][1].push(res[i].exchangeRate[j].purchaseRate || res[i].exchangeRate[j].purchaseRateNB);

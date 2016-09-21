@@ -21,7 +21,7 @@
                     <datetimepicker data-ng-model="data.date1" data-datetimepicker-config="{ startView:'year', minView: 'day'}"></datetimepicker>
                 </div>
                 <div class="col-md-2 hidden-sm hidden-xs">
-                    <span class="glyphicon glyphicon-fire"></span>
+                    <span class="glyphicon glyphicon-random"></span>
                 </div>
                 <div class="col-md-5 col-sm-12 datetimepicker-container">
                     <p>Selected End Date:
@@ -35,13 +35,16 @@
             <h2 class="text-center error" ng-if="data.date1 > data.date2">Начальная дата не может быть больше конечной</h2>
 
             <div class="form-group">
-                <label for="sel1" style-"margin-top: 30px;">Select currency:</label>
-                <select class="form-control" id="sel1">
-                    <option name="currency" ng-repeat="c in curNames" ng-model="final.name" value="c">
-                        {{c | uppercase}}
-                    </option>
-                </select>
-                <button class="btn btn-lg btn-success" style="margin-top: 30px;" ng-click="getInfo()">Show your currency changes</button>
+                <button class="btn btn-lg btn-success" ng-click="getInfo()">Show your currency changes</button>
+				<p style="margin-top: 30px;">
+					<!-- <label for="sel1" style-"margin-top: 30px;">Select currency:</label> -->
+					<select class="form-control" id="sel1" ng-model="final.name" >
+						<option value="usd" disabled selected>Select currency:</option>
+						<option name="currency" ng-repeat="c in curNames" ng-value="c">
+							{{c | uppercase}}
+						</option>
+					</select>
+				</p>
             </div>
 
             <canvas id="line" class="chart chart-line" data="currencies[final.name]" labels="dates" legend="true" series="series" colours="colours" ng-click="checkMe()"></canvas>
@@ -58,6 +61,6 @@
         <script src="bower_components/Chart.js/Chart.min.js"></script>
         <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
         <script src="bower_components/lodash/dist/lodash.min.js"></script>
-        <script src="http://sbiliaiev.github.io/moneyCharts/js/main.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>

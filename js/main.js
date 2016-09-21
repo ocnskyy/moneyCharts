@@ -1,83 +1,88 @@
-﻿angular.module('myApp',['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'chart.js'])
-.factory('myService', function($http, $filter, $q) {
-  var getArray = function(first, last) {
-    var promises = [];
+﻿
+angular.module('myApp', ['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'chart.js'])
+    .factory('myService', function($http, $filter, $q) {
+        var getArray = function(first, last) {
+            var promises = [];
 
-    var tmp = _.clone(first);
-    tmp.setDate(tmp.getDate() - 1);
+            var tmp = _.clone(first);
+            tmp.setDate(tmp.getDate() - 1);
 
-    while (tmp < last) {
-      tmp.setDate(tmp.getDate() + 1);
-      var str = "../zapros.php?date=" + $filter('date')(tmp, 'dd.MM.yyyy');
-      promises.push($http.get(str));
-    }
+            while (tmp < last) {
+                tmp.setDate(tmp.getDate() + 1);
+                var str = "../zapros.php?date=" + $filter('date')(tmp, 'dd.MM.yyyy');
+                promises.push($http.get(str));
+            }
 
-    return $q.all(promises).then(function (responce) {
-      var arr = [];
-      responce.forEach(function (item) {
-        arr.push(item.data);
-      });
-      return arr;
-    });
-  };
+            return $q.all(promises).then(function(responce) {
+                var arr = [];
+                responce.forEach(function(item) {
+                    arr.push(item.data);
+                });
+                return arr;
+            });
+        };
 
-  return {
-    getArray: getArray
-  };
-})
-.controller('MyController', function($scope, myService){
-  $scope.minDate = new Date('2009/01/01');
-  $scope.maxDate = new Date('2015/06/10');
+        return {
+            getArray: getArray
+        };
+    })
+    .controller('MyController', function($scope, myService) {
+        $scope.minDate = new Date('2009/01/01');
+        $scope.maxDate = new Date();
+        // $scope.curDate = new Date();
+        // console.log('current date', $scope.curDate);
 
-  $scope.save = true;
+        $scope.save = true;
 
-  $scope.final = {
-    name: 'usd'
-  };
+        $scope.final = {
+            // name: 'usd'
+        };
 
-  $scope.series = ['Sale', 'Purchase'];
-  $scope.colours = [
-  {
-    'fillColor': 'rgba(0, 0, 255, 0.1)',
-    'strokeColor': '#7400D9',
-    'pointColor': '#7400D9'
-    // 'highlightFill': 'rgba(47, 132, 71, 0.8)'
-    // 'highlightStroke': 'rgba(47, 132, 71, 0.8)'
-  },
-  {
-    'fillColor': 'rgba(0, 0, 255, 0.1)',
-    'strokeColor': '#0085F7',
-    'pointColor': '#0085F7'
-  }
-  ];
+        $scope.series = ['Sale', 'Purchase'];
+        $scope.colours = [{
+            'fillColor': 'rgba(0, 0, 255, 0.1)',
+            'strokeColor': '#7400D9',
+            'pointColor': '#7400D9'
+                // 'highlightFill': 'rgba(47, 132, 71, 0.8)'
+                // 'highlightStroke': 'rgba(47, 132, 71, 0.8)'
+        }, {
+            'fillColor': 'rgba(0, 0, 255, 0.1)',
+            'strokeColor': '#0085F7',
+            'pointColor': '#0085F7'
+        }];
 
-  $scope.getInfo = function() {
+        $scope.curNames = ['usd', 'eur', 'rub', 'chf', 'gbp', 'plz', 'sek', 'xau', 'cad'];
+        $scope.getInfo = function() {
+                // console.log('YOYO', final);
 
-    if ($scope.save == true) {
-      $scope.take = $scope.data.data1;
-    }
+                if ($scope.save == true) {
+                    $scope.take = $scope.data.data1;
+                }
 
-    $scope.save = false;
-    
-    $scope.dates = [];
+                $scope.save = false;
 
-    $scope.currencies = {};
+                $scope.dates = [];
 
-    myService.getArray($scope.data.date1, $scope.data.date2).then(function (res) {
-      for (i in res) {
-       $scope.dates.push(res[i].date);
+                $scope.currencies = {};
 
-       for (j in res[i].exchangeRate) {
-        var key = res[i].exchangeRate[j].currency.toLowerCase();
-        if ( _.isEmpty($scope.currencies[key])) {
-          $scope.currencies[key] =  [[],[]];
-        }
-        $scope.currencies[key][0].push(res[i].exchangeRate[j].saleRate || res[i].exchangeRate[j].saleRateNB);
-        $scope.currencies[key][1].push(res[i].exchangeRate[j].purchaseRate || res[i].exchangeRate[j].purchaseRateNB);
-        }   //for j
-      }   //for i
+                myService.getArray($scope.data.date1, $scope.data.date2).then(function(res) {
+                    for (i in res) {
+                        $scope.dates.push(res[i].date);
 
-    });//конец функции сервиса
+                        for (j in res[i].exchangeRate) {
+                            var key = res[i].exchangeRate[j].currency.toLowerCase();
+                            if (_.isEmpty($scope.currencies[key])) {
+                                $scope.currencies[key] = [
+                                    [],
+                                    []
+                                ];
+                            }
+                            $scope.currencies[key][0].push(res[i].exchangeRate[j].saleRate || res[i].exchangeRate[j].saleRateNB);
+                            $scope.currencies[key][1].push(res[i].exchangeRate[j].purchaseRate || res[i].exchangeRate[j].purchaseRateNB);
+                        } //for j
+                    } //for i
 
-  } //конец функции контроллера
-}); //конец контроллера
+                }); //конец функции сервиса
+
+            } //конец функции контроллера
+    }); //конец контроллера

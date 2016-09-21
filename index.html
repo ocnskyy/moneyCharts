@@ -1,93 +1,63 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-app="myApp">
-<head>
-  	<title>Perfect Money Charts!</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" />
-    <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
-    
-</head>
-<body>
-	<h1 class="title-class">Perfect Money Charts!</h1>
+    <head>
+        <title>Perfect Money Charts!</title>
+		<meta charset="utf-8">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+        <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
 
- <div class="container date-area" ng-controller="MyController">
-   <div class="row">
-     <div class="col-md-5" >
-     <p>Selected Begin Date: {{ data.date1 | date:'dd-MM-yyyy' }}</p>
-       <datetimepicker data-ng-model="data.date1"
-                            data-datetimepicker-config="{ startView:'year', minView: 'day'}">
-            </datetimepicker>
-     </div>
-    <div class="col-md-2">
-      <span class="glyphicon glyphicon-fire"></span>
-    </div>
-     <div class="col-md-5">
-     <p>Selected End Date: {{ data.date2 | date:'dd-MM-yyyy' }}</p>
-       <datetimepicker data-ng-model="data.date2"
-                            data-datetimepicker-config="{ startView:'year', minView: 'day'}">
-        </datetimepicker>
-     </div>
-   </div>
-
-    <h2 class="text-center error" ng-if="data.date1 > maxDate || data.date2 > maxDate">Дата больше максимальной</h2>
-    <h2 class="text-center error" ng-if="data.date1 < minDate || data.date2 < minDate">Дата меньше минимальной</h2>
-    <h2 class="text-center error" ng-if="data.date1 > data.date2">Начальная дата не может быть больше конечной</h2>
-  
-
-    <div class="row money text-center">
-        <div class="form-group">
-
-            <div class="col-md-1 radio-inline">
-                <span>USD</span><input type="radio" name="currency" ng-model="final.name" value="usd" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>EUR</span><input type="radio" name="currency" ng-model="final.name" value="eur" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>RUB</span><input type="radio" name="currency" ng-model="final.name" value="rub" ng-click="getInfo()">
+    </head>
+    <body>
+        <h1 class="title-class">Perfect Money Charts!</h1>
+        <div class="container date-area" ng-controller="MyController">
+            <h2>Current date is
+                {{maxDate | date:'dd-MM-yyyy'}}</h2>
+            <div class="row">
+                <div class="col-md-5 col-sm-12 datetimepicker-container">
+                    <p>Selected Begin Date:
+                        {{ data.date1 | date:'dd-MM-yyyy' }}</p>
+                    <datetimepicker data-ng-model="data.date1" data-datetimepicker-config="{ startView:'year', minView: 'day'}"></datetimepicker>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs">
+                    <span class="glyphicon glyphicon-fire"></span>
+                </div>
+                <div class="col-md-5 col-sm-12 datetimepicker-container">
+                    <p>Selected End Date:
+                        {{ data.date2 | date:'dd-MM-yyyy' }}</p>
+                    <datetimepicker data-ng-model="data.date2" data-datetimepicker-config="{ startView:'year', minView: 'day'}"></datetimepicker>
+                </div>
             </div>
 
-             <div class="col-md-1 radio-inline">
-                <span>CHF</span><input type="radio" name="currency" ng-model="final.name" value="chf" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>GBP</span><input type="radio" name="currency" ng-model="final.name" value="gbp" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>PLZ</span><input type="radio" name="currency" ng-model="final.name" value="plz" ng-click="getInfo()">
+            <h2 class="text-center error" ng-if="data.date1 > maxDate || data.date2 > maxDate">Дата больше максимальной</h2>
+            <h2 class="text-center error" ng-if="data.date1 < minDate || data.date2 < minDate">Дата меньше минимальной</h2>
+            <h2 class="text-center error" ng-if="data.date1 > data.date2">Начальная дата не может быть больше конечной</h2>
+
+            <div class="form-group">
+                <label for="sel1" style-"margin-top: 30px;">Select currency:</label>
+                <select class="form-control" id="sel1">
+                    <option name="currency" ng-repeat="c in curNames" ng-model="final.name" value="c">
+                        {{c | uppercase}}
+                    </option>
+                </select>
+                <button class="btn btn-lg btn-success" style="margin-top: 30px;" ng-click="getInfo()">Show your currency changes</button>
             </div>
 
-             <div class="col-md-1 radio-inline">
-                <span>SEK</span><input type="radio" name="currency" ng-model="final.name" value="sek" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>XAU</span><input type="radio" name="currency" ng-model="final.name" value="xau" ng-click="getInfo()">
-            </div>
-             <div class="col-md-1 radio-inline">
-                <span>CAD</span><input type="radio" name="currency" ng-model="final.name" value="cad" ng-click="getInfo()">
-            </div>
+            <canvas id="line" class="chart chart-line" data="currencies[final.name]" labels="dates" legend="true" series="series" colours="colours" ng-click="checkMe()"></canvas>
 
         </div>
-    </div>
 
-    <canvas id="line" class="chart chart-line" data="currencies[final.name]"
-      labels="dates" legend="true" series="series" colours="colours" ng-click="checkMe()">
-    </canvas> 
-
- </div>
-
-	<!-- Scripts -->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>    
-    <script src="bower_components/moment/min/moment.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>   
-    <script src="bower_components/angular/angular.min.js"></script>        
-    <script src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-    <script src="bower_components/Chart.js/Chart.min.js"></script>
-    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
-    <script src="bower_components/lodash/dist/lodash.min.js"></script>
-
-    <script src="js/main.js"></script>
-</body>
+        <!-- Scripts -->
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/moment/min/moment.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+        <script src="bower_components/Chart.js/Chart.min.js"></script>
+        <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+        <script src="bower_components/lodash/dist/lodash.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>
